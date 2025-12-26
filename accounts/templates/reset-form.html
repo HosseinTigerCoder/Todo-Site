@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>تغییر رمز عبور</title>
+
+    <!-- Vazir Font -->
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazir-font@30.1.0/dist/font-face.css" rel="stylesheet">
+
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: Vazir, sans-serif;
+        }
+
+        body {
+            margin: 0;
+            height: 100vh;
+            background: linear-gradient(135deg, #4f46e5, #6366f1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card {
+            background: #fff;
+            padding: 35px 30px;
+            border-radius: 16px;
+            width: 100%;
+            max-width: 420px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 25px;
+            color: #1f2937;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 14px;
+            color: #374151;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px 14px;
+            border-radius: 10px;
+            border: 1px solid #d1d5db;
+            font-size: 14px;
+            margin-bottom: 18px;
+            transition: 0.3s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #4f46e5;
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 12px;
+            background: #4f46e5;
+            color: #fff;
+            font-size: 15px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: #4338ca;
+        }
+
+        .message {
+            background: #eef2ff;
+            color: #1e3a8a;
+            padding: 10px 12px;
+            border-radius: 10px;
+            font-size: 13px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .message.error {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <h2>تغییر رمز عبور</h2>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="message {% if message.tags %}{{ message.tags }}{% endif %}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <form action="" method="POST">
+            {% csrf_token %}
+
+            <label for="password1">رمز عبور جدید</label>
+            <input type="password" name="password1" placeholder="رمز عبور جدید را وارد کنید" required>
+
+            <label for="password2">تکرار رمز عبور</label>
+            <input type="password" name="password2" placeholder="رمز عبور را دوباره وارد کنید" required>
+
+            <button type="submit">تأیید</button>
+        </form>
+    </div>
+
+</body>
+</html>

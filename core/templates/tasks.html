@@ -1,0 +1,233 @@
+{% load jalali_tags %}
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <title>مدیریت کارها</title>
+
+    <style>
+        /* فونت و راست‌چین */
+        body {
+            font-family: "Vazirmatn", sans-serif;
+            direction: rtl;
+            background-color: #f4f6f8;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+
+        h3 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #333;
+        }
+
+        /* فرم افزودن تسک */
+        form.add-task {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        form.add-task input[type="text"] {
+            flex: 1;
+            padding: 10px 15px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            width: 270px;
+            font-size: 16px;
+        }
+
+        form.add-task button {
+            padding: 2px 20px;
+            border: none;
+            background-color: #007bff;
+            color: #fff;
+            font-size: 22px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        form.add-task button:hover {
+            background-color: #0056b3;
+        }
+
+        /* لیست تسک‌ها */
+        ul.task-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        ul.task-list li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #fdfdfd;
+            padding: 12px 15px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+        }
+
+        /* بخش عنوان و وضعیت */
+        .task-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .task-info span.title {
+            font-weight: 500;
+            font-size: 16px;
+        }
+
+        .task-info span.completed {
+            text-decoration: line-through;
+            color: #6c757d;
+        }
+
+        .badge {
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .badge-success {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .badge-warning {
+            background-color: #ffc107;
+            color: #212529;
+        }
+
+        /* دکمه‌ها */
+        .task-buttons a {
+            text-decoration: none;
+            padding: 5px 10px;
+            font-size: 12px;
+            border-radius: 6px;
+            border: 1px solid transparent;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .task-buttons a.edit {
+            border-color: #17a2b8;
+            color: #17a2b8;
+        }
+
+        .task-buttons a.edit:hover {
+            background-color: #17a2b8;
+            color: #fff;
+        }
+
+        .task-buttons a.delete {
+            border-color: #dc3545;
+            color: #dc3545;
+        }
+
+        .task-buttons a.delete:hover {
+            background-color: #dc3545;
+            color: #fff;
+        }
+
+        /* چک‌باکس */
+        input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+        .btn-back {
+            display: inline-block;
+            padding: 8px 20px;
+            background: #0d6efd; /* آبی شیک */
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 500;
+            transition: 0.2s;
+        }
+
+        .btn-back:hover {
+            background: #0a4fb5;
+            /* transform: translateY(-2px); */
+        }
+
+        .btn-back:active {
+            background: #0a58ca;
+            transform: translateY(0);
+        }
+    </style>
+
+</head>
+<body>
+
+<div class="container">
+
+    <h3>مدیریت کارها - {{ user.fullname }}</h3>
+
+    <!-- فرم افزودن تسک -->
+    <form action="" method="POST" class="add-task">
+        {% csrf_token %}
+        {{ form.as_p }}
+        {{ form.media }}
+
+        <button type="submit">+</button>
+    </form>
+
+    <!-- لیست تسک‌ها -->
+    <ul class="task-list">
+        {% for task in tasks %}
+        <li>
+            <!-- بخش عنوان و وضعیت -->
+            <div class="task-info">
+                <form method="post" action="{% url 'check_task' task.id %}">
+                    {% csrf_token %}
+                    <input type="checkbox" name="tick" onchange="this.form.submit()" {% if task.status %}checked{% endif %}>
+                </form>
+
+                <span class="title {% if task.status %}completed{% endif %}">{{ task.title }}</span>
+
+                {% if task.status %}
+                    <span class="badge badge-success">انجام شد</span>
+                {% else %}
+                    <span class="badge badge-warning">در انتظار</span>
+                    <span class="badge badge-info">تاریخ انجام : {{ task.reminder_date|to_jalali:"%Y/%m/%d" }}</span>
+                    
+                {% endif %}
+            </div>
+
+            <!-- دکمه‌ها -->
+            <div class="task-buttons">
+                <a href="{% url 'edit_task' task.id %}" class="edit">ویرایش</a>
+                <a href="{% url 'delete_task' task.id %}" class="delete">حذف</a>
+            </div>
+        </li>
+        {% endfor %}
+            {% for message in messages %}
+                {% if message %}
+                    <li>{{ message }}</li>
+                {% endif %}
+            {% endfor %}
+    </ul>
+
+    <a href="{% url 'home' %}" class="btn-back">بازگشت</a>
+</div>
+
+
+</body>
+</html>

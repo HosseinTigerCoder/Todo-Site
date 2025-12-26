@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>مدیریت کارها | صفحه اصلی</title>
+
+    <!-- Bootstrap RTL -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.rtl.min.css" rel="stylesheet">
+
+    <!-- Font Vazir -->
+    <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/fonts/webfonts/Vazirmatn-font-face.css" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Vazirmatn', sans-serif !important;
+            background-color: #f8f9fa;
+        }
+        .hero {
+            background: linear-gradient(to left, #0d6efd, #6610f2);
+            color: white;
+            padding: 80px 0;
+            border-radius: 0 0 25px 25px;
+        }
+        .footer {
+            background: #0d6efd;
+            color: white;
+            padding: 20px 0;
+            margin-top: 50px;
+            border-radius: 25px 25px 0 0;
+        }
+        .nav-item.dropdown {
+            position: relative;
+        }
+
+        /* آیکون پروفایل */
+        .profile-icon .icon {
+            font-size: 22px;
+            cursor: pointer;
+        }
+
+        /* لیست کشویی */
+        .dropdown-menu {
+            list-style: none;
+            position: absolute;
+            right: 0;
+            top: 40px;
+            background: white;
+            border-radius: 8px;
+            padding: 8px 0;
+            width: 150px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            display: none;
+            z-index: 999;
+        }
+
+        /* آیتم‌ها */
+        .dropdown-menu li a {
+            display: block;
+            padding: 10px 15px;
+            text-decoration: none;
+            color: #333;
+            transition: 0.2s;
+        }
+
+        .dropdown-menu li a:hover {
+            background: #f2f2f2;
+        }
+
+        /* نمایش منو هنگام hover */
+        .nav-item.dropdown:hover .dropdown-menu {
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Header -->
+    <nav class="navbar navbar-expand-lg bg-primary navbar-dark">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="#">مدیریت کارها</a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'tasks' %}">وظایف من</a>
+                    </li>
+                    {% if user.is_authenticated %}
+                        <li class="nav-item dropdown">
+                            <a href="" class="nav-link profile-icon">
+                                <span class="icon">👤</span>
+                            </a>
+
+                            <ul class="dropdown-menu">
+                                <li><a href="{% url 'change_password' %}">تغییر رمز عبور</a></li>
+                                <li><a href="{% url 'logout' %}">خروج</a></li>
+                            </ul>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'login' %}">ورود</a>
+                        </li>
+                    {% endif %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'about_us' %}">درباره ما</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero text-center">
+        <div class="container">
+            <h1 class="fw-bold display-5">به برنامه مدیریت وظایف خوش آمدید</h1>
+            <p class="mt-3 fs-5">
+                اینجا می‌تونی کارهاتو مدیریت کنی، برنامه‌ریزی کنی و همیشه منظم باشی!
+            </p>
+            <a href="{% url 'tasks' %}" class="btn btn-light btn-lg mt-4 fw-bold">
+                مشاهده لیست کارها
+            </a>
+        </div>
+    </section>
+
+    <!-- Content -->
+    <div class="container text-center mt-5">
+        <h2 class="fw-bold">چرا از این سیستم استفاده کنم؟</h2>
+
+        <div class="row mt-4">
+            <div class="col-md-4">
+                <div class="p-3 shadow-sm bg-white rounded-4">
+                    <h5 class="fw-bold">ساده و سریع</h5>
+                    <p>در چند ثانیه کارهای جدید اضافه کن و مدیریت کن.</p>
+                </div>
+            </div>
+
+            <div class="col-md-4 mt-3 mt-md-0">
+                <div class="p-3 shadow-sm bg-white rounded-4">
+                    <h5 class="fw-bold">کاملاً واکنش‌گرا</h5>
+                    <p>روی موبایل، تبلت و لپ‌تاپ عالی نمایش داده می‌شود.</p>
+                </div>
+            </div>
+
+            <div class="col-md-4 mt-3 mt-md-0">
+                <div class="p-3 shadow-sm bg-white rounded-4">
+                    <h5 class="fw-bold">طراحی مدرن</h5>
+                    <p>رابط کاربری جذاب با Bootstrap و فونت وزیر.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer text-center mt-5">
+        <div class="container">
+            <p class="mb-0">تمام حقوق محفوظ است © 2025</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
